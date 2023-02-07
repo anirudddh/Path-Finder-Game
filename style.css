@@ -1,0 +1,186 @@
+@keyframes jumping {
+  0%    {transform:scale(2);}
+  100%  {transform:scale(1);}
+}
+
+@keyframes dotReveal {
+  to  {opacity:1;}
+}
+
+@keyframes line {
+  0%    {stroke-dashoffset:0}
+  100%    {stroke-dashoffset:100%}
+}
+
+body {
+  cursor:crosshair;
+  background-color: black;
+  background-image: linear-gradient(to top, rgba(46, 204, 113,0.2) 1%, rgba(255,255,255,0) 0),
+                    linear-gradient(to right, rgba(46, 204, 113,0.2) 1%, rgba(255,255,255,0) 0);
+  background-size: 50px 50px;
+}
+
+svg, html, body, #app  {
+  box-sizing: border-box;
+  height:100%;
+  width:100%;
+  padding:0;
+  margin:0;
+  overflow:hidden;
+}
+
+svg {position: relative;z-index:1;}
+
+.dot {
+  z-index:10;
+  stroke-width:4;
+  stroke:black;
+  width: 10px;
+  height: 10px;
+  fill: rgba(241, 196, 15,1.0);
+  -moz-transform-origin: center;
+  -webkit-transform-origin: center;
+  transform-origin: center;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.320, 1.275);
+}
+
+.dot--starting.dot--starting {
+  fill:black;
+  stroke: rgba(46, 204, 113,1.0);
+  stroke-width:3;
+  stroke-miterlimit: outside;
+}
+
+.dot:not(.dot--starting) {
+  opacity:0;
+  animation: dotReveal 1s linear;
+  animation-fill-mode: forwards;
+}
+
+#svg  .dot:hover {
+  transform: scale(2);
+}
+
+#svg .dot[data-selected=true] {
+  opacity:1;
+  fill: rgba(46, 204, 113,1.0);
+  animation: jumping 0.5s ease-in-out alternate infinite;
+  animation-delay:0;
+}
+
+#svg  .dot[data-visited=true] {
+  fill:rgba(46, 204, 113,1.0);
+  animation: jumping 0.5s ease-in-out alternate infinite;
+  animation-delay:0;
+  opacity:1;
+}
+
+.line {
+  z-index:10;
+  stroke: rgba(46, 204, 113,1.0);
+  stroke-width:2;
+  stroke-dasharray: 2 16;
+  animation: line 10s linear infinite;
+}
+
+@media (max-width:480px) { 
+  #preline {
+    display: none;
+  }
+}
+
+#score {
+  position: fixed;
+  z-index:0;
+  top: 50%;
+  left:50%;
+  width: 100%;
+  text-align:center;
+  transform: translate(-50%, -50%);
+  font-size:20em;
+  color: rgba(46, 204, 113,0.2);
+  font-family: 'Bungee Outline', cursive;
+}
+
+.btn {
+  background: transparent;
+  cursor:pointer;
+  color:rgba(241, 196, 15,1.0);
+  font-weight:bold;
+  padding: 15px 60px;
+  border-radius: 6px;
+  border: 3px solid rgba(241, 196, 15,1.0);
+  transition: all 0.3s ease-out;
+}
+
+.btn:hover {
+  background: rgba(241, 196, 15,1.0);
+  color: black;
+}
+
+#btn-start {
+  position: absolute;
+  top: 50%;
+  left:50%;
+  transform: translate(-50%, -50%);
+}
+
+#launch-screen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  visibility:hidden;
+  position: absolute;
+  z-index: 10;
+  background-image: linear-gradient(45deg, black, rgba(46, 204, 113,0.2));
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  opacity:0;
+  transition: all 0.8s cubic-bezier(0.175, 0.885, 0.320, 1.275);
+}
+
+#launch-screen.is-visible {
+  opacity:1;
+  visibility:visible;
+}
+
+#launch-screen-content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  padding: 50px;
+  transform: scale(0.8);
+  transition: all 0.8s cubic-bezier(0.175, 0.885, 0.320, 1.275);
+}
+
+
+#launch-screen.is-visible #launch-screen-content {
+  transform: scale(1);
+}
+
+#launch-screen-content h1 {
+  position: relative;
+  font-family: 'Bungee Outline', cursive;
+  color: rgba(46, 204, 113,1.0);
+  font-size: 4em;
+  margin: 0 0 0.4em 0;
+}
+
+
+#launch-screen-content p {
+  font-family: 'Space Mono', monospace;
+  color:#ccc;
+  font-size: 1em;
+  margin: 0 0 3em 0;
+}
+
+#lastScore {display:none;}
+#lastScore.is-visible {display:block;}
+
+#lastScore__number {color:rgba(231, 76, 60,1.0);}
